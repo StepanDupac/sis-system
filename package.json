@@ -1,0 +1,13 @@
+{
+  "name": "sis-executor",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Czech Chrome exam-registration assistant with a tested execution engine and offline training mode.",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node tests/browser.js",
+    "package": "python3 scripts/package.py"
+  },
+  "devDependencies": { "@playwright/test": "1.64.1" }
+}

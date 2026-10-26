@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Termín · pomocník se zápisem</title>
+  <link rel="stylesheet" href="app.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="app.html" aria-label="Termín – úvod">
+      <span class="brand-mark" aria-hidden="true">t.</span><span>termín<span class="brand-dot">.</span></span>
+    </a>
+    <nav aria-label="Hlavní navigace"><span class="version">PRO CHROME · 0.2</span><a href="manual.html" target="_blank" rel="noopener">Krátký návod <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <div class="hero">
+      <div><p class="eyebrow">MÉNĚ KLIKÁNÍ. VÍCE KLIDU.</p><h1>Na zkoušku.<br><span>Ve vašem termínu.</span></h1><p class="hero-copy">Seřaďte termíny podle přání. Nastavte čas.<br>O zbytek se postará připravený postup.</p></div>
+      <div class="hero-note"><span class="pill">ZKUŠEBNÍ VERZE</span><p>Nejdřív si vše<br><strong>v klidu vyzkoušejte.</strong></p><span>Bez přihlášení a bez skutečného zápisu.</span></div>
+    </div>
+    <div class="mode-tabs" role="tablist" aria-label="Režim použití">
+      <button id="demo-tab" role="tab" aria-selected="true" aria-controls="demo-panel" type="button">01 <span>Zkouška nanečisto</span></button>
+      <button id="live-tab" role="tab" aria-selected="false" aria-controls="live-panel" tabindex="-1" type="button">02 <span>SIS Univerzity Karlovy</span><span class="small-dot" aria-hidden="true"></span></button>
+    </div>
+    <section id="live-panel" role="tabpanel" aria-labelledby="live-tab" hidden>
+      <div class="connection-card"><div class="section-number">02</div><div><p class="eyebrow">SIS · UNIVERZITA KARLOVA</p><h2>Připojíme stránku s vašimi termíny.</h2><p>Ostrý zápis zatím není dostupný. K dokončení potřebujeme ověřit ovládání stránky po přihlášení.</p><ol class="connection-steps"><li><a href="https://is.cuni.cz/studium/" target="_blank" rel="noopener">Otevřete SIS UK</a> a přihlaste se.</li><li>Otevřete <strong>Termíny zkoušek – přihlašování</strong> a zobrazte termíny předmětu.</li><li>Přímo v záložce SIS klikněte na ikonu rozšíření <strong>Termín</strong>.</li><li>V tomto okně stiskněte <strong>Načíst stránku SIS</strong>.</li></ol><p class="field-hint">Načtení pouze přečte strukturu stránky. Nic nezapisuje ani nemačká. Heslo zůstává v SIS.</p><div class="connection-buttons"><button id="inspect-cuni" class="primary" type="button">Načíst stránku SIS <span aria-hidden="true">→</span></button><button id="download-cuni" class="text-button" type="button" disabled>Uložit přehled pro dokončení</button></div><div id="cuni-result" class="result" role="status" aria-live="polite" hidden></div><details id="cuni-details" hidden><summary>Co bude uložený přehled obsahovat?</summary><pre id="cuni-report"></pre></details><button id="back-to-demo" class="text-button" type="button">Zatím vyzkoušet nanečisto →</button></div></div>
+    </section>
+    <section id="demo-panel" role="tabpanel" aria-labelledby="demo-tab">
+      <div class="notice"><span class="notice-icon" aria-hidden="true">i</span><p><strong>Jste v tréninku.</strong> Všechny termíny i odpovědi jsou ukázkové. Do univerzitního systému se nic neposílá.</p></div>
+      <div class="workspace">
+        <div class="setup-column">
+          <section class="card" aria-labelledby="slots-title">
+            <div class="card-heading"><div><p class="eyebrow">KROK 1</p><h2 id="slots-title">Vaše pořadí termínů</h2></div><span class="count-badge" id="selected-count">3 vybrané</span></div>
+            <p class="muted card-copy">Nejoblíbenější nahoru. Další přijde na řadu, když je předchozí plný.</p>
+            <div class="subject-line"><span class="subject-icon" aria-hidden="true">∑</span><div><strong>Matematika</strong><span>Ukázková zkouška · datum můžete upravit</span></div></div>
+            <div id="slots" class="slot-list"></div>
+            <button type="button" id="add-slot" class="text-button">+ Přidat náhradní termín</button>
+          </section>
+          <section class="card" aria-labelledby="time-title">
+            <div class="card-heading"><div><p class="eyebrow">KROK 2</p><h2 id="time-title">Kdy se má spustit zápis?</h2></div><span class="line-icon" aria-hidden="true">◷</span></div>
+            <fieldset class="time-choice"><legend class="sr-only">Způsob nastavení času</legend><label><input type="radio" name="timing" value="quick" checked> Za 5 sekund od spuštění</label><label><input type="radio" name="timing" value="exact"> V přesný čas</label></fieldset>
+            <div id="exact-time-row" hidden><label class="field-label" for="open-time">Datum a čas otevření zápisu</label><input id="open-time" type="datetime-local" step="1"><p class="field-hint" id="timezone"></p></div>
+            <div class="field-block"><label class="field-label" for="scenario">Co chcete v tréninku vyzkoušet?</label><select id="scenario"></select></div>
+          </section>
+        </div>
+        <aside class="execution-column" aria-label="Spuštění a výsledek">
+          <section class="execution-card">
+            <div class="status-line"><span id="status-dot" class="status-dot"></span><span id="status-label">Připraveno k vyzkoušení</span><span class="offline-label">TRÉNINK</span></div>
+            <div class="countdown" id="countdown" aria-hidden="true">00:05<span>.000</span></div>
+            <p id="countdown-caption" class="countdown-caption">Odpočet začne po stisknutí tlačítka.</p>
+            <div class="run-summary"><span>Vybraných termínů</span><strong id="summary-count">3</strong></div>
+            <div class="run-summary"><span>Současných zápisů</span><strong>1 koordinovaný</strong></div>
+            <div class="run-summary last"><span>Příprava</span><strong>Souběžné kontroly</strong></div>
+            <button id="start" class="primary start-button" type="button" disabled>Spustit zkoušku nanečisto <span aria-hidden="true">→</span></button>
+            <button id="stop" class="stop-button" type="button" hidden>Zastavit další pokusy</button>
+            <p class="run-help">Nechte tuto záložku otevřenou v popředí.</p>
+            <div id="result" class="result" role="status" aria-live="polite" hidden></div>
+            <button id="reset-demo" class="text-button reset-button" type="button" hidden>Vymazat nejasný výsledek tréninku</button>
+          </section>
+          <div id="visibility-note" class="small-notice" hidden>Záložka není v popředí. Pro přesné načasování se sem vraťte.</div>
+          <section class="how-card"><span class="how-icon" aria-hidden="true">↗</span><div><h3>Rychle a s přehledem</h3><p>Příprava běží souběžně. Zápisy se řídí vaším pořadím. Po potvrzení úspěchu se vše zastaví.</p></div></section>
+        </aside>
+      </div>
+      <section class="card activity-card" aria-labelledby="activity-title">
+        <div class="card-heading"><div><p class="eyebrow">VŠE NA JEDNOM MÍSTĚ</p><h2 id="activity-title">Průběh zápisu</h2></div><button id="download-log" class="text-button" type="button" disabled>Uložit průběh ↓</button></div>
+        <p id="empty-log" class="muted">Tady uvidíte, co právě probíhá a který termín vyšel.</p><ol id="activity" class="activity-list" aria-label="Záznam událostí"></ol>
+      </section>
+    </section>
+  </main>
+  <footer><span>termín. <span class="muted">Malý pomocník pro velký den.</span></span><span>Uloženo jen v tomto prohlížeči · žádné heslo</span></footer>
+</body>
+</html>
